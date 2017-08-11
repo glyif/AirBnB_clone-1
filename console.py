@@ -278,6 +278,13 @@ class HBNBCommand(cmd.Cmd):
 
     @staticmethod
     def marshal_dict(list):
+        """
+        marshal_dict - marshals a list with key=value
+        into a dictionary
+
+        :param list: list to unmarshal
+        :return: None if a list element is invalid or marshaled dictionary
+        """
         marshalled_dict = {}
         for item in list:
             split = item.split("=")
@@ -290,6 +297,12 @@ class HBNBCommand(cmd.Cmd):
 
     @staticmethod
     def validate_string(string):
+        """
+        validate_string - validates a string
+
+        :param string: string to validate
+        :return: None if not valid string, string if is valid
+        """
         string = string[1:-1]
 
         if ' ' in string:
@@ -304,6 +317,12 @@ class HBNBCommand(cmd.Cmd):
 
     @staticmethod
     def convert_type(string):
+        """
+        convert_type - converts a string to appropriate type
+
+        :param string: string to convert
+        :return: converted type: float, int, string
+        """
         if string[0] != '"':
             if '.' in string:
                 return float(string)
