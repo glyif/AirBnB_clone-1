@@ -5,12 +5,15 @@ BaseModel Class of Models Module
 
 import json
 import models
-from uuid import uuid4, UUID
 from datetime import datetime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, String, Date
+
 
 now = datetime.now
 strptime = datetime.strptime
 
+Base = declarative_base()
 
 class BaseModel:
     """attributes and functions for BaseModel class"""
@@ -20,9 +23,9 @@ class BaseModel:
         if kwargs:
             self.__set_attributes(kwargs)
         else:
-            self.id = str(uuid4())
-            self.created_at = now()
-            models.storage.new(self)
+            self.id = Column(String(60), nullable=False, primary_key=True)
+            self.created_at = Column(Date, nullable=False, default=datetime.utcnow())
+            self.updated_at = Column(Date, nullable=False, onupdate=datetime.utcnow())
 
     def __set_attributes(self, d):
         """converts kwargs values to python class attributes"""
@@ -50,7 +53,7 @@ class BaseModel:
 
     def save(self):
         """updates attribute updated_at to current time"""
-        self.updated_at = now()
+        models.storage.new(self)
         models.storage.save()
 
     def to_json(self):
@@ -62,9 +65,14 @@ class BaseModel:
             else:
                 bm_dict[k] = str(v)
         bm_dict["__class__"] = type(self).__name__
+        bm_dict.pop("_sa_instance_state", None)
         return(bm_dict)
 
     def __str__(self):
         """returns string type representation of object instance"""
         cname = type(self).__name__
         return "[{}] ({}) {}".format(cname, self.id, self.__dict__)
+
+    def delete(self):
+        """delete method"""
+        models.storage.delete(self)
