@@ -80,6 +80,8 @@ github repo
 
 * MJ Johnson, [@mj31508](https://github.com/mj31508)
 * David John Coleman II, [davidjohncoleman.com](http://www.davidjohncoleman.com/)
+* Kristen Loyd, [@KRLoyd](https://github.com/KRLoyd)
+* Bobby Yang, [@glyif](https://github.com/glyif)
 
 ## License
 
