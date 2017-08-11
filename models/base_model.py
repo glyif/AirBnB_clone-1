@@ -5,6 +5,7 @@ BaseModel Class of Models Module
 
 import json
 import models
+from uuid import uuid4
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, Date
@@ -18,14 +19,17 @@ Base = declarative_base()
 class BaseModel:
     """attributes and functions for BaseModel class"""
 
+    id = Column(String(60), nullable=False, primary_key=True)
+    created_at = Column(Date(), nullable=False, default=datetime.now())
+    updated_at = Column(Date(), nullable=False, default=datetime.now(), onupdate=datetime.now())
+
     def __init__(self, *args, **kwargs):
         """instantiation of new BaseModel Class"""
         if kwargs:
             self.__set_attributes(kwargs)
         else:
-            self.id = Column(String(60), nullable=False, primary_key=True)
-            self.created_at = Column(Date, nullable=False, default=datetime.utcnow())
-            self.updated_at = Column(Date, nullable=False, onupdate=datetime.utcnow())
+            self.id = str(uuid4())
+            self.created_at = now()
 
     def __set_attributes(self, d):
         """converts kwargs values to python class attributes"""
