@@ -69,15 +69,24 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def do_create(self, arg):
-        """create: create [ARG]
+        """create <Class name> <param 1> <param 2> <param 3>...
+        PARAM: <key name>=<value>
         ARG = Class Name
         SYNOPSIS: Creates a new instance of the Class from given input ARG"""
         arg = arg.split()
-        error = self.__class_err(arg)
-        if not error:
+        for item in arg[1:]:
+            if "=" not in item:
+                return
+
+        args_dict = HBNBCommand.marshal_dict(arg[1:])
+        if args_dict:
             for k, v in CNC.items():
                 if k == arg[0]:
                     my_obj = v()
+
+                    for key, value in args_dict.items():
+                        setattr(my_obj, key, value)
+
                     my_obj.save()
                     print(my_obj.id)
 
@@ -266,6 +275,64 @@ class HBNBCommand(cmd.Cmd):
                     v(new_arg)
                     return
         self.default(arg)
+
+    @staticmethod
+    def marshal_dict(list):
+        """
+        marshal_dict - marshals a list with key=value
+        into a dictionary
+
+        :param list: list to unmarshal
+        :return: None if a list element is invalid or marshaled dictionary
+        """
+        marshalled_dict = {}
+        for item in list:
+            split = item.split("=")
+            if HBNBCommand.convert_type(split[1]):
+                marshalled_dict[split[0]] = HBNBCommand.convert_type(split[1])
+            else:
+                return None
+
+        return marshalled_dict
+
+    @staticmethod
+    def validate_string(string):
+        """
+        validate_string - validates a string
+
+        :param string: string to validate
+        :return: None if not valid string, string if is valid
+        """
+        string = string[1:-1]
+
+        if ' ' in string:
+            return None
+
+        for index, char in enumerate(string):
+            if char == '"':
+                if string[index-1] != '\'':
+                    return None
+
+        return string
+
+    @staticmethod
+    def convert_type(string):
+        """
+        convert_type - converts a string to appropriate type
+
+        :param string: string to convert
+        :return: converted type: float, int, string
+        """
+        if string[0] != '"':
+            if '.' in string:
+                return float(string)
+            return int(string)
+
+        if not HBNBCommand.validate_string(string):
+            return None
+
+        return string
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
