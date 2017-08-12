@@ -1,9 +1,9 @@
 from os import getenv
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import Base
-from models import CNC
+from models.engine.file_storage import CNC
 
 
 class DBStorage:
@@ -47,5 +47,6 @@ class DBStorage:
 
     def reload(self):
         Base.metadata.create_all(self.__engine)
-        # self.__session(create_engine()) something like that, not enough time to finish
+        session = sessionmaker(self.__engine)
+        self.__session = scoped_session(session)
 
