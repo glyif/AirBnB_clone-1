@@ -9,10 +9,7 @@ from datetime import datetime
 strptime = datetime.strptime
 to_json = base_model.BaseModel.to_json
 
-
-class FileStorage:
-    """handles long term storage of all class instances"""
-    CNC = {
+CNC = {
         'BaseModel': base_model.BaseModel,
         'Amenity': amenity.Amenity,
         'City': city.City,
@@ -21,6 +18,11 @@ class FileStorage:
         'State': state.State,
         'User': user.User
     }
+
+
+class FileStorage:
+    """handles long term storage of all class instances"""
+
     """CNC - this variable is a dictionary with:
     keys: Class Names
     values: Class type (used for instantiation)

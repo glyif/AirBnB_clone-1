@@ -5,6 +5,7 @@ BaseModel Class of Models Module
 
 import json
 import models
+from os import getenv
 from uuid import uuid4
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
@@ -16,12 +17,14 @@ strptime = datetime.strptime
 
 Base = declarative_base()
 
+
 class BaseModel:
     """attributes and functions for BaseModel class"""
 
-    id = Column(String(60), nullable=False, primary_key=True)
-    created_at = Column(Date(), nullable=False, default=datetime.now())
-    updated_at = Column(Date(), nullable=False, default=datetime.now(), onupdate=datetime.now())
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        id = Column(String(60), nullable=False, primary_key=True)
+        created_at = Column(Date(), nullable=False, default=datetime.now())
+        updated_at = Column(Date(), nullable=False, default=datetime.now(), onupdate=datetime.now())
 
     def __init__(self, *args, **kwargs):
         """instantiation of new BaseModel Class"""
