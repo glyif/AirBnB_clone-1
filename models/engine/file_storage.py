@@ -9,7 +9,10 @@ from datetime import datetime
 strptime = datetime.strptime
 to_json = base_model.BaseModel.to_json
 
-CNC = {
+
+class FileStorage:
+    """handles long term storage of all class instances"""
+    CNC = {
         'BaseModel': base_model.BaseModel,
         'Amenity': amenity.Amenity,
         'City': city.City,
@@ -18,11 +21,6 @@ CNC = {
         'State': state.State,
         'User': user.User
     }
-
-
-class FileStorage:
-    """handles long term storage of all class instances"""
-
     """CNC - this variable is a dictionary with:
     keys: Class Names
     values: Class type (used for instantiation)
@@ -65,7 +63,6 @@ class FileStorage:
         """deletes obj"""
         if obj is None:
             return
-
         if obj.id in FileStorage.__objects.keys():
             del (FileStorage.__objects[obj.id])
             self.save()
