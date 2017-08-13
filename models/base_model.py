@@ -9,7 +9,7 @@ from os import getenv
 from uuid import uuid4
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, String, Date
+from sqlalchemy import Column, String, DateTime
 
 
 now = datetime.now
@@ -23,8 +23,8 @@ class BaseModel:
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         id = Column(String(60), nullable=False, primary_key=True)
-        created_at = Column(Date(), nullable=False, default=datetime.now())
-        updated_at = Column(Date(), nullable=False, default=datetime.now(), onupdate=datetime.now())
+        created_at = Column(DateTime(), nullable=False, default=datetime.utcnow())
+        updated_at = Column(DateTime(), nullable=False, default=datetime.utcnow(), onupdate=datetime.utcnow())
 
     def __init__(self, *args, **kwargs):
         """instantiation of new BaseModel Class"""
