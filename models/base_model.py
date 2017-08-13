@@ -23,8 +23,8 @@ class BaseModel:
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         id = Column(String(60), nullable=False, primary_key=True)
-        created_at = Column(DateTime(), nullable=False, default=datetime.utcnow())
-        updated_at = Column(DateTime(), nullable=False, default=datetime.utcnow(), onupdate=datetime.utcnow())
+        created_at = Column(DateTime(), nullable=False, default=datetime.utcnow)
+        updated_at = Column(DateTime(), nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def __init__(self, *args, **kwargs):
         """instantiation of new BaseModel Class"""
@@ -37,11 +37,11 @@ class BaseModel:
     def __set_attributes(self, d):
         """converts kwargs values to python class attributes"""
         if not isinstance(d['created_at'], datetime):
-            d['created_at'] = strptime(d['created_at'], "%Y-%m-%d %H:%M:%S.%f")
+            d['created_at'] = strptime(d['created_at'], "%Y-%m-%d %H:%M:%S")
         if 'updated_at' in d:
             if not isinstance(d['updated_at'], datetime):
                 d['updated_at'] = strptime(d['updated_at'],
-                                           "%Y-%m-%d %H:%M:%S.%f")
+                                           "%Y-%m-%d %H:%M:%S")
         if d['__class__']:
             d.pop('__class__')
         self.__dict__ = d
