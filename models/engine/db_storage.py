@@ -2,13 +2,25 @@ from os import getenv
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-from models.base_model import Base
+
+from models.amenity import Amenity
+from models.base_model import BaseModel, Base
+from models.city import City
+from models.place import Place, PlaceAmenity
+from models.review import Review
+from models.state import State
+from models.user import User
+
 from models import CNC
 
 
 class DBStorage:
     __engine = None
     __session = None
+
+    all_classes = {"Amenity": Amenity, "City": City, "State": State,
+                     "Place": Place, "Review": Review,
+                     "User": User, "PlaceAmenity": PlaceAmenity}
 
     def __init__(self):
         self.__engine = create_engine('mysql+mysqldb://{:s}:{:s}@{:s}/{:s}'.
@@ -26,7 +38,7 @@ class DBStorage:
         query_data = {}
 
         if cls is None:
-            for valid_class in CNC.keys():
+            for valid_key, valid_class in DBStorage.all_classes.items():
                 for instance in self.__session.query(valid_class):
                     query_data.update({instance.id: instance})
             return query_data
@@ -49,4 +61,3 @@ class DBStorage:
         Base.metadata.create_all(self.__engine)
         session = sessionmaker(self.__engine)
         self.__session = scoped_session(session)
-
