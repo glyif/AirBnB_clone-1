@@ -79,7 +79,6 @@ class HBNBCommand(cmd.Cmd):
                 return
 
         args_dict = HBNBCommand.marshal_dict(arg[1:])
-        print(args_dict)
         if args_dict:
             for k, v in CNC.items():
                 if k == arg[0]:
