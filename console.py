@@ -74,12 +74,14 @@ class HBNBCommand(cmd.Cmd):
         ARG = Class Name
         SYNOPSIS: Creates a new instance of the Class from given input ARG"""
         arg = arg.split()
+        validated_args = []
         for item in arg[1:]:
             if "=" not in item:
-                return
+                continue
+            validated_args.append(item)
 
-        args_dict = HBNBCommand.marshal_dict(arg[1:])
-        print(args_dict)
+
+        args_dict = HBNBCommand.marshal_dict(validated_args[1:])
         if args_dict:
             for k, v in CNC.items():
                 if k == arg[0]:
@@ -305,7 +307,12 @@ class HBNBCommand(cmd.Cmd):
         :param string: string to validate
         :return: None if not valid string, string if is valid
         """
+        if string[0] != "\"" or string[len(string) - 1] != "\"":
+            return
+
         string = string[1:-1]
+
+        quote_count = 0
 
         if ' ' in string:
             return None
@@ -314,6 +321,12 @@ class HBNBCommand(cmd.Cmd):
             if char == '"':
                 if string[index-1] != '\'':
                     return None
+                quote_count = quote_count + 1
+
+        if quote_count % 2 != 0:
+            return None
+
+        string = string.replace("_", " ")
 
         return string
 
@@ -330,7 +343,9 @@ class HBNBCommand(cmd.Cmd):
                 return float(string)
             return int(string)
 
-        if not HBNBCommand.validate_string(string):
+        string = HBNBCommand.validate_string(string)
+
+        if not string:
             return None
 
         return string.strip("\"")
