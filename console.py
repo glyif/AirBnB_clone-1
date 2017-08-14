@@ -291,7 +291,6 @@ class HBNBCommand(cmd.Cmd):
             split = item.split("=")
             if HBNBCommand.convert_type(split[1]):
                 marshalled_dict[split[0]] = HBNBCommand.convert_type(split[1])
-                print(HBNBCommand.convert_type(split[1]))
             else:
                 continue
 
