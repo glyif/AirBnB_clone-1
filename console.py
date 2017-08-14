@@ -79,6 +79,7 @@ class HBNBCommand(cmd.Cmd):
                 return
 
         args_dict = HBNBCommand.marshal_dict(arg[1:])
+        print(args_dict)
         if args_dict:
             for k, v in CNC.items():
                 if k == arg[0]:
@@ -290,8 +291,9 @@ class HBNBCommand(cmd.Cmd):
             split = item.split("=")
             if HBNBCommand.convert_type(split[1]):
                 marshalled_dict[split[0]] = HBNBCommand.convert_type(split[1])
+                print(HBNBCommand.convert_type(split[1]))
             else:
-                return None
+                continue
 
         return marshalled_dict
 
@@ -331,7 +333,7 @@ class HBNBCommand(cmd.Cmd):
         if not HBNBCommand.validate_string(string):
             return None
 
-        return string
+        return string.strip("\"")
 
 
 if __name__ == '__main__':
