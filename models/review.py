@@ -5,12 +5,12 @@ Review Class from Models Module
 
 from os import getenv
 from sqlalchemy import Column, String, ForeignKey
-from sqlalchemy.orm import relationship
-
-from models.base_model import BaseModel
 
 
-class Review(BaseModel):
+from models.base_model import BaseModel, Base
+
+
+class Review(BaseModel, Base):
     """Review class handles all application reviews"""
 
     if getenv("HBNB_TYPE_STORAGE") == "db":

@@ -7,10 +7,10 @@ from os import getenv
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
 
-from models.base_model import BaseModel
+from models.base_model import BaseModel, Base
 
 
-class User(BaseModel):
+class User(BaseModel, Base):
     """User class handles all application users"""
 
     if getenv("HBNB_TYPE_STORAGE") == "db":
@@ -19,8 +19,8 @@ class User(BaseModel):
         password = Column(String(128), nullable=False)
         first_name = Column(String(128), nullable=False)
         last_name = Column(String(128), nullable=False)
-        places = Column(relationship("Place", cascade="all, delete-orphan", backref="User"))
-        reviews = Column(relationship("Reviews", cascade="all, delete-orphan", backref="User"))
+        places = Column(relationship("Place", cascade="all, delete-orphan", backref="user"))
+        reviews = Column(relationship("Reviews", cascade="all, delete-orphan", backref="user"))
     else:
         email = ''
         password = ''
