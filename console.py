@@ -80,13 +80,11 @@ class HBNBCommand(cmd.Cmd):
                 continue
             validated_args.append(item)
 
-
-        args_dict = HBNBCommand.marshal_dict(validated_args[1:])
+        args_dict = HBNBCommand.marshal_dict(validated_args)
         if args_dict:
             for k, v in CNC.items():
                 if k == arg[0]:
                     my_obj = v()
-
                     for key, value in args_dict.items():
                         setattr(my_obj, key, value)
 
@@ -293,8 +291,6 @@ class HBNBCommand(cmd.Cmd):
             split = item.split("=")
             if HBNBCommand.convert_type(split[1]):
                 marshalled_dict[split[0]] = HBNBCommand.convert_type(split[1])
-            else:
-                continue
 
         return marshalled_dict
 
