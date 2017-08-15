@@ -5,7 +5,7 @@ BaseModel Class of Models Module
 
 import json
 import models
-from os import getenv
+from os import getenv, environ
 from uuid import uuid4
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
@@ -15,7 +15,10 @@ from sqlalchemy import Column, String, DateTime
 now = datetime.now
 strptime = datetime.strptime
 
-Base = declarative_base()
+if getenv("HBNB_TYPE_STORAGE") == "db":
+    Base = declarative_base()
+else:
+    Base = object
 
 
 class BaseModel:

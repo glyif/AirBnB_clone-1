@@ -11,10 +11,11 @@ from models.base_model import BaseModel, Base
 
 
 class PlaceAmenity(Base):
-    __tablename__ = "place_amenity"
-    metadata = Base.metadata
-    place_id = Column(String(60), ForeignKey("places.id"), primary_key=True, nullable=False)
-    amenity_id = Column(String(60), ForeignKey("amenities.id"), primary_key=True, nullable=False)
+    if getenv("HBNB_TYPE_STORAGE") == "db":
+        __tablename__ = "place_amenity"
+        metadata = Base.metadata
+        place_id = Column(String(60), ForeignKey("places.id"), primary_key=True, nullable=False)
+        amenity_id = Column(String(60), ForeignKey("amenities.id"), primary_key=True, nullable=False)
 
 
 class Place(BaseModel, Base):

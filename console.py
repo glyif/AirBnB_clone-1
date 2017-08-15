@@ -3,10 +3,12 @@
 Command interpreter for Holberton AirBnB project
 """
 import cmd
-from models import base_model, user, storage, CNC
+from models import base_model
+from models import storage
+from models import CNC
+
 
 BaseModel = base_model.BaseModel
-User = user.User
 FS = storage
 
 
