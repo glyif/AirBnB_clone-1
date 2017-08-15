@@ -81,15 +81,13 @@ class HBNBCommand(cmd.Cmd):
             validated_args.append(item)
 
         args_dict = HBNBCommand.marshal_dict(validated_args)
-        if args_dict:
-            for k, v in CNC.items():
-                if k == arg[0]:
-                    my_obj = v()
-                    for key, value in args_dict.items():
-                        setattr(my_obj, key, value)
-
-                    my_obj.save()
-                    print(my_obj.id)
+        for k, v in CNC.items():
+            if k == arg[0]:
+                my_obj = v()
+                for key, value in args_dict.items():
+                    setattr(my_obj, key, value)
+                my_obj.save()
+                print(my_obj.id)
 
     def do_show(self, arg):
         """show: show [ARG] [ARG1]
