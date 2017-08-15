@@ -5,7 +5,7 @@ BaseModel Class of Models Module
 
 import json
 import models
-from uuid import uuid4, UUID
+from uuid import uuid4
 from datetime import datetime
 
 now = datetime.now
