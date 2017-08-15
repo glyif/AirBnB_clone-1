@@ -13,7 +13,7 @@ from models.user import User
 """CNC - dictionary = { Class Name (string) : Class Type }"""
 
 
-if getenv("HBNB_TYPE_STORAGE") == "db":
+if getenv("HBNB_TYPE_STORAGE", "fs") == "db":
     from models.engine import db_storage
     CNC = db_storage.DBStorage.CNC
     storage = db_storage.DBStorage()
