@@ -3,21 +3,27 @@ from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from models import base_model, amenity, city, place, review, state, user
-from models.base_model import Base
+from models.amenity import Amenity
+from models.base_model import BaseModel, Base
+from models.city import City
+from models.place import Place, PlaceAmenity
+from models.review import Review
+from models.state import State
+from models.user import User
+
 
 class DBStorage:
     __engine = None
     __session = None
 
     CNC = {
-        'BaseModel': base_model.BaseModel,
-        'Amenity': amenity.Amenity,
-        'City': city.City,
-        'Place': place.Place,
-        'Review': review.Review,
-        'State': state.State,
-        'User': user.User
+        "Amenity": Amenity,
+        "City": City,
+        "State": State,
+        "Place": Place,
+        "Review": Review,
+        "User": User,
+        "PlaceAmenity": PlaceAmenity
     }
 
     def __init__(self):
