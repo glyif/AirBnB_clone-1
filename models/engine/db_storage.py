@@ -44,11 +44,13 @@ class DBStorage:
         if cls is None:
             for valid_key, valid_class in DBStorage.CNC.items():
                 for instance in self.__session.query(valid_class):
-                    query_data.update({instance.id: instance})
+                    key = instance.__name__ + "." + instance.id
+                    query_data.update({key: instance})
             return query_data
         else:
             for instance in self.__session.query(cls):
-                query_data.update({instance.id: instance})
+                key = instance.__name__ + "." + instance.id
+                query_data.update({key: instance})
             return query_data
 
     def new(self, obj):
