@@ -305,7 +305,6 @@ class HBNBCommand(cmd.Cmd):
 
         string = string[1:-1]
 
-        quote_count = 0
 
         if ' ' in string:
             return None
@@ -334,7 +333,7 @@ class HBNBCommand(cmd.Cmd):
         if not string:
             return None
 
-        return string.strip("\"")
+        return string
 
 
 if __name__ == '__main__':
