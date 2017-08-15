@@ -85,9 +85,7 @@ class HBNBCommand(cmd.Cmd):
         args_dict = HBNBCommand.marshal_dict(validated_args)
         for k, v in CNC.items():
             if k == arg[0]:
-                my_obj = v()
-                for key, value in args_dict.items():
-                    setattr(my_obj, key, value)
+                my_obj = v(**args_dict)
                 my_obj.save()
                 print(my_obj.id)
 
