@@ -36,6 +36,7 @@ class BaseModel:
         if kwargs:
             for key, value in kwargs.items():
                 setattr(self, key, value)
+        models.storage.new(self)
 
 
     def __is_serializable(self, obj_v):

@@ -310,14 +310,7 @@ class HBNBCommand(cmd.Cmd):
         if ' ' in string:
             return None
 
-        for index, char in enumerate(string):
-            if char == '"':
-                if string[index-1] != '\'':
-                    return None
-                quote_count = quote_count + 1
-
-        if quote_count % 2 != 0:
-            return None
+        string = string.replace('"', '\"')
 
         string = string.replace("_", " ")
 
