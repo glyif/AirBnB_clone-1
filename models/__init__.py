@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+
+
+from os import getenv
 from models.engine import file_storage
 from models.base_model import BaseModel
 from models.amenity import Amenity
@@ -7,7 +11,13 @@ from models.review import Review
 from models.state import State
 from models.user import User
 
-storage = file_storage.FileStorage()
-storage.reload()
 """CNC - dictionary = { Class Name (string) : Class Type }"""
 CNC = file_storage.FileStorage.CNC
+
+if getenv("HBNB_TYPE_STORAGE") == "db":
+    from models.engine import db_storage
+    storage = db_storage.DBStorage()
+    storage.reload()
+else:
+    storage = file_storage.FileStorage()
+    storage.reload()
