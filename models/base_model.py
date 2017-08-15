@@ -31,23 +31,12 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """instantiation of new BaseModel Class"""
+        self.id = str(uuid4())
+        self.created_at = now()
         if kwargs:
-            self.__set_attributes(kwargs)
-        else:
-            self.id = str(uuid4())
-            self.created_at = now()
+            for key, value in kwargs.items():
+                setattr(self, key, value)
 
-    def __set_attributes(self, d):
-        """converts kwargs values to python class attributes"""
-        if not isinstance(d['created_at'], datetime):
-            d['created_at'] = strptime(d['created_at'], "%Y-%m-%d %H:%M:%S")
-        if 'updated_at' in d:
-            if not isinstance(d['updated_at'], datetime):
-                d['updated_at'] = strptime(d['updated_at'],
-                                           "%Y-%m-%d %H:%M:%S")
-        if d['__class__']:
-            d.pop('__class__')
-        self.__dict__ = d
 
     def __is_serializable(self, obj_v):
         """checks if object is serializable"""
@@ -63,6 +52,7 @@ class BaseModel:
 
     def save(self):
         """updates attribute updated_at to current time"""
+        self.updated_at = datetime.now()
         models.storage.new(self)
         models.storage.save()
 

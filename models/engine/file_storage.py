@@ -57,6 +57,9 @@ class FileStorage:
             return
         for o_id, d in new_objs.items():
             k_cls = d['__class__']
+            d.pop("__class__", None)
+            d["created_at"] = datetime.strptime(d["created_at"], "%Y-%m-%d %H:%M:%S.%f")
+            d["updated_at"] = datetime.strptime(d["updated_at"], "%Y-%m-%d %H:%M:%S.%f")
             FileStorage.__objects[o_id] = FileStorage.CNC[k_cls](**d)
 
     def delete(self, obj=None):
