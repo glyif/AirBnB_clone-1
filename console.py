@@ -80,18 +80,14 @@ class HBNBCommand(cmd.Cmd):
                 continue
             validated_args.append(item)
 
-
-        args_dict = HBNBCommand.marshal_dict(validated_args[1:])
-        if args_dict:
-            for k, v in CNC.items():
-                if k == arg[0]:
-                    my_obj = v()
-
-                    for key, value in args_dict.items():
-                        setattr(my_obj, key, value)
-
-                    my_obj.save()
-                    print(my_obj.id)
+        args_dict = HBNBCommand.marshal_dict(validated_args)
+        for k, v in CNC.items():
+            if k == arg[0]:
+                my_obj = v()
+                for key, value in args_dict.items():
+                    setattr(my_obj, key, value)
+                my_obj.save()
+                print(my_obj.id)
 
     def do_show(self, arg):
         """show: show [ARG] [ARG1]
@@ -293,9 +289,6 @@ class HBNBCommand(cmd.Cmd):
             split = item.split("=")
             if HBNBCommand.convert_type(split[1]):
                 marshalled_dict[split[0]] = HBNBCommand.convert_type(split[1])
-                print(HBNBCommand.convert_type(split[1]))
-            else:
-                continue
 
         return marshalled_dict
 
