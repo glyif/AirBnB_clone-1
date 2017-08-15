@@ -146,7 +146,7 @@ class HBNBCommand(cmd.Cmd):
         if not error:
             fs_o = FS.all()
             for k in fs_o.keys():
-                if arg[1] in k and arg[0] in k:
+                if arg[1] in k and arg[0] in str(type(fs_o[k])):
                     storage.delete(fs_o[k])
                     FS.save()
                     return
