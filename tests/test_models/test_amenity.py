@@ -6,8 +6,7 @@ import unittest
 from datetime import datetime
 import models
 import json
-from models.engine.db_storage import __session
-from os import environ
+from os import getenv
 from models.engine.db_storage import DBStorage
 
 Amenity = models.amenity.Amenity
@@ -55,15 +54,15 @@ class TestAmenityInstances(unittest.TestCase):
 
     def setUp(self):
         """initializes new amenity for testing"""
-        if (environ(HBNB_TYPE_STORAGE) == "db"):
-            DBStorage.__init__()
-            amenity0 = Amenity(name="wifi")
-            DBStorage.new(amenity0)
+        if (getenv("HBNB_TYPE_STORAGE") == "db"):
+            # DBStorage.__init__()
+            self.amenity = Amenity(name="wifi")
+            DBStorage.new(self.amenity)
             DBStorage.save()
         else:
             self.amenity = Amenity()
 
-    @unittest.skipIf(environ(HBNB_TYPE_STORAGE) == "file",
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == "file",
                      "only need to tearDown if database used")
     def tearDown(self):
         """tearDown to close __session and __engine when using database"""
@@ -99,7 +98,7 @@ class TestAmenityInstances(unittest.TestCase):
         expected = type(datetime.now())
         self.assertEqual(expected, actual)
 
-    @unittest.skipIf(environ(HBNB_TYPE_STORAGE) == "db",
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == "db",
                      "this test used filestorage, not a database")
     def test_to_json(self):
         """... to_json should return serializable dict object"""
@@ -111,7 +110,7 @@ class TestAmenityInstances(unittest.TestCase):
             actual = 0
         self.assertTrue(1 == actual)
 
-    @unittest.skipIf(environ(HBNB_TYPE_STORAGE) == "db",
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == "db",
                      "this test used filestorage, not a database")
     def test_json_class(self):
         """... to_json should include class key with value Amenity"""
@@ -132,19 +131,19 @@ class TestAmenityInstances(unittest.TestCase):
         expected = "greatWifi"
         self.assertEqual(expected, actual)
 
-    @unittest.skipIf(environ(HBNB_TYPE_STORAGE) == 'file',
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == 'file',
                      "this test uses a database for storage")
     def test_amenity_id(self):
-        expected = self.amenity0.id
+        expected = self.amenity.id
         actual = DBStorage.__session.query(Amenity).filter(
             Amenity.id == expected).one()
         self.assertTrue(expected == actual)
 
-    @unittest.skipIf(environ(HBNB_TYPE_STORAGE) == 'file',
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == 'file',
                      "this test uses a database for stroage")
     def test_amenity_attr_name(self):
         expected = "wifi"
-        amenity_id = self.amenity0.id
+        amenity_id = self.amenity.id
         amenity_obj = DBStorage.__session.query(Amenity).filter(
             Amenity.id == amenity_id).one()
         actual = DBStorage.__session.query(Amenity.name).filter(
@@ -152,4 +151,4 @@ class TestAmenityInstances(unittest.TestCase):
         self.assertTrue(expected == actual)
 
 if __name__ == '__main__':
-    unittest.main
+    unittest.main()
