@@ -88,6 +88,8 @@ class HBNBCommand(cmd.Cmd):
                 my_obj = v(**args_dict)
                 my_obj.save()
                 print(my_obj.id)
+                return
+        print(HBNBCommand.ERR[1])
 
     def do_show(self, arg):
         """show: show [ARG] [ARG1]
