@@ -88,6 +88,8 @@ class HBNBCommand(cmd.Cmd):
                 my_obj = v(**args_dict)
                 my_obj.save()
                 print(my_obj.id)
+                return
+        print(HBNBCommand.ERR[1])
 
     def do_show(self, arg):
         """show: show [ARG] [ARG1]
@@ -146,8 +148,8 @@ class HBNBCommand(cmd.Cmd):
         if not error:
             fs_o = FS.all()
             for k in fs_o.keys():
-                if arg[1] in k and arg[0] in k:
-                    del fs_o[k]
+                if arg[1] in k and arg[0] in str(type(fs_o[k])):
+                    storage.delete(fs_o[k])
                     FS.save()
                     return
             print(HBNBCommand.ERR[3])
@@ -300,24 +302,15 @@ class HBNBCommand(cmd.Cmd):
         :param string: string to validate
         :return: None if not valid string, string if is valid
         """
-        if string[0] != "\"" or string[len(string) - 1] != "\"":
-            return
+        if string[0] != '"' or string[-1] != '"':
+            return None
 
         string = string[1:-1]
-
-        quote_count = 0
 
         if ' ' in string:
             return None
 
-        for index, char in enumerate(string):
-            if char == '"':
-                if string[index-1] != '\'':
-                    return None
-                quote_count = quote_count + 1
-
-        if quote_count % 2 != 0:
-            return None
+        string = string.replace('"', '\"')
 
         string = string.replace("_", " ")
 
@@ -331,17 +324,23 @@ class HBNBCommand(cmd.Cmd):
         :param string: string to convert
         :return: converted type: float, int, string
         """
-        if string[0] != '"':
-            if '.' in string:
-                return float(string)
-            return int(string)
 
-        string = HBNBCommand.validate_string(string)
+        if string[0] == '"' and string[-1] == '"':
+            string = HBNBCommand.validate_string(string)
+            if not string:
+                pass
+            else:
+                return string
 
-        if not string:
-            return None
+        if string.isdigit():
+            string = int(string)
+        else:
+            try:
+                string = float(string)
+            except:
+                pass
 
-        return string.strip("\"")
+        return string
 
 
 if __name__ == '__main__':

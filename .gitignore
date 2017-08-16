@@ -4,3 +4,4 @@ dev/file.json
 __pycache__
 .idea
 db_data
+.DS_STORE
