@@ -55,9 +55,13 @@ class TestAmenityInstances(unittest.TestCase):
 
     def setUp(self):
         """initializes new amenity for testing"""
-        self.amenity = Amenity()
         if (environ(HBNB_TYPE_STORAGE) == "db"):
             DBStorage.__init__()
+            amenity0 = Amenity(name="wifi")
+            DBStorage.new(amenity0)
+            DBStorage.save()
+        else:
+            self.amenity = Amenity()
 
     @unittest.skipIf(environ(HBNB_TYPE_STORAGE) == "file",
                      "only need to tearDown if database used")
@@ -131,9 +135,7 @@ class TestAmenityInstances(unittest.TestCase):
     @unittest.skipIf(environ(HBNB_TYPE_STORAGE) == 'file',
                      "this test uses a database for storage")
     def test_amenity_id(self):
-        expected = self.amenity.id
-        DBStorage.new(self.amenity)
-        DBStorage.save()
+        expected = self.amenity0.id
         actual = DBStorage.__session.query(Amenity).filter(
             Amenity.id == expected).one()
         self.assertTrue(expected == actual)
@@ -142,13 +144,9 @@ class TestAmenityInstances(unittest.TestCase):
                      "this test uses a database for stroage")
     def test_amenity_attr_name(self):
         expected = "wifi"
-        amenity_id = self.amenity.id
-        DBStorage.new(self.amenity)
-        DBStorage.save()
+        amenity_id = self.amenity0.id
         amenity_obj = DBStorage.__session.query(Amenity).filter(
             Amenity.id == amenity_id).one()
-        amenity_obj.name = "wifi"
-        DBStorage.save(amenity_obj)
         actual = DBStorage.__session.query(Amenity.name).filter(
             Amenity.id == amenity_id).one()
         self.assertTrue(expected == actual)
