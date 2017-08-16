@@ -18,8 +18,7 @@ class Amenity(BaseModel, Base):
         name = Column(String(128), nullable=False)
         place_amenities = relationship("Place",
                                        cascade="all, delete",
-                                       secondary="place_amenity",
-                                       backref="amenities")
+                                       secondary="place_amenity")
     else:
         name = ''
 
