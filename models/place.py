@@ -13,10 +13,7 @@ from models.base_model import BaseModel, Base
 if getenv("HBNB_TYPE_STORAGE") == "db":
     place_amenity = Table('place_amenity', Base.metadata,
                           Column('place_id', String(60), ForeignKey('places.id')),
-                          Column('amenity_id', String(60), ForeignKey('amenities.id')),
-                          relationship("Amenity",
-                                       cascade="all, delete",
-                                       backref="amenities"))
+                          Column('amenity_id', String(60), ForeignKey('amenities.id', ondelete="CASCADE")))
 
 
 class Place(BaseModel, Base):
