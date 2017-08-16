@@ -302,8 +302,8 @@ class HBNBCommand(cmd.Cmd):
         :param string: string to validate
         :return: None if not valid string, string if is valid
         """
-        if string[0] != "\"" or string[len(string) - 1] != "\"":
-            return
+        if string[0] != '"' or string[-1] != '"':
+            return None
 
         string = string[1:-1]
 
@@ -324,15 +324,21 @@ class HBNBCommand(cmd.Cmd):
         :param string: string to convert
         :return: converted type: float, int, string
         """
-        if string[0] != '"':
-            if '.' in string:
-                return float(string)
-            return int(string)
 
-        string = HBNBCommand.validate_string(string)
+        if string[0] == '"' and string[-1] == '"':
+            string = HBNBCommand.validate_string(string)
+            if not string:
+                pass
+            else:
+                return string
 
-        if not string:
-            return None
+        if string.isdigit():
+            string = int(string)
+        else:
+            try:
+                string = float(string)
+            except:
+                pass
 
         return string
 
