@@ -3,9 +3,9 @@
 Command interpreter for Holberton AirBnB project
 """
 import cmd
+from models import Amenity, City, State, Place, Review, User
 from models import base_model
 from models import storage
-from models import CNC
 
 
 BaseModel = base_model.BaseModel
@@ -24,6 +24,15 @@ class HBNBCommand(cmd.Cmd):
         '** value missing **',
         ]
 
+    CNC = {
+        "Amenity": Amenity,
+        "City": City,
+        "State": State,
+        "Place": Place,
+        "Review": Review,
+        "User": User,
+    }
+
     def default(self, line):
         """default response for unknown commands"""
         pass
@@ -39,7 +48,7 @@ class HBNBCommand(cmd.Cmd):
             print(HBNBCommand.ERR[0])
             error = 1
         else:
-            if arg[0] not in CNC:
+            if arg[0] not in self.CNC:
                 print(HBNBCommand.ERR[1])
                 error = 1
         return error
@@ -83,11 +92,14 @@ class HBNBCommand(cmd.Cmd):
             validated_args.append(item)
 
         args_dict = HBNBCommand.marshal_dict(validated_args)
-        for k, v in CNC.items():
+        for k, v in self.CNC.items():
             if k == arg[0]:
                 my_obj = v(**args_dict)
                 my_obj.save()
                 print(my_obj.id)
+                return
+        print(HBNBCommand.ERR[1])
+
 
     def do_show(self, arg):
         """show: show [ARG] [ARG1]
@@ -120,11 +132,11 @@ class HBNBCommand(cmd.Cmd):
             l = 0
             if arg:
                 for v in fs_o.values():
-                    if type(v).__name__ == CNC[arg[0]].__name__:
+                    if type(v).__name__ == self.CNC[arg[0]].__name__:
                         l += 1
                 c = 0
                 for v in fs_o.values():
-                    if type(v).__name__ == CNC[arg[0]].__name__:
+                    if type(v).__name__ == self.CNC[arg[0]].__name__:
                         c += 1
                         print(v, end=(', ' if c < l else ''))
             else:
