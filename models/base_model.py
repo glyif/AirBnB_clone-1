@@ -26,8 +26,13 @@ class BaseModel:
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         id = Column(String(60), nullable=False, primary_key=True)
-        created_at = Column(DateTime(), nullable=False, default=datetime.utcnow)
-        updated_at = Column(DateTime(), nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+        created_at = Column(DateTime(),
+                            nullable=False,
+                            default=datetime.utcnow)
+        updated_at = Column(DateTime(),
+                            nullable=False,
+                            default=datetime.utcnow,
+                            onupdate=datetime.utcnow)
 
     def __init__(self, *args, **kwargs):
         """instantiation of new BaseModel Class"""
@@ -37,7 +42,6 @@ class BaseModel:
             for key, value in kwargs.items():
                 setattr(self, key, value)
         models.storage.new(self)
-
 
     def __is_serializable(self, obj_v):
         """checks if object is serializable"""

@@ -307,7 +307,6 @@ class HBNBCommand(cmd.Cmd):
 
         string = string[1:-1]
 
-
         if ' ' in string:
             return None
 

@@ -10,6 +10,9 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
+"""
+Database engine
+"""
 
 
 class DBStorage:
@@ -26,6 +29,9 @@ class DBStorage:
     }
 
     def __init__(self):
+        """
+
+        """
         self.__engine = create_engine('mysql+mysqldb://{:s}:{:s}@{:s}/{:s}'.
                                       format(getenv('HBNB_MYSQL_USER'),
                                              getenv('HBNB_MYSQL_PWD'),
@@ -38,6 +44,11 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
+        """
+        returns dictonary with all objects
+        :param cls: class
+        :return: dictonary with objects
+        """
         query_data = {}
 
         if cls is None:
@@ -53,16 +64,34 @@ class DBStorage:
             return query_data
 
     def new(self, obj):
+        """
+        adds new db
+        :param obj: object to add
+        :return: nothing
+        """
         self.__session.add(obj)
 
     def save(self):
+        """
+        commits to db
+        :return: nothing
+        """
         self.__session.commit()
 
     def delete(self, obj=None):
+        """
+        delete obj
+        :param obj: obj to delete
+        :return: nothing
+        """
         if obj:
             self.__session.delete(obj)
 
     def reload(self):
+        """
+        reloads with scoped session
+        :return: nothing
+        """
         Base.metadata.create_all(self.__engine)
         session = sessionmaker(self.__engine)
         self.__session = scoped_session(session)
