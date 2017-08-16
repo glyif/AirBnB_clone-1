@@ -56,7 +56,7 @@ class TestAmenityInstances(unittest.TestCase):
     def setUp(self):
         """initializes new amenity for testing"""
         self.amenity = Amenity()
-        if (HBNB_TYPE_STORAGE == "db"):
+        if (environ(HBNB_TYPE_STORAGE) == "db"):
             DBStorage.__init__()
 
     @unittest.skipIf(environ(HBNB_TYPE_STORAGE) == "file",
