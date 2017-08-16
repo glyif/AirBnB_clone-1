@@ -6,7 +6,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from models.amenity import Amenity
 from models.base_model import BaseModel, Base
 from models.city import City
-from models.place import Place, PlaceAmenity
+from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
@@ -22,8 +22,7 @@ class DBStorage:
         "State": State,
         "Place": Place,
         "Review": Review,
-        "User": User,
-        "PlaceAmenity": PlaceAmenity
+        "User": User
     }
 
     def __init__(self):

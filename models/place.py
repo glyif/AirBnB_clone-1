@@ -4,18 +4,16 @@ Place Class from Models Module
 """
 
 from os import getenv
-from sqlalchemy import Column, Integer, Float, String, ForeignKey
+from sqlalchemy import Column, Table, Integer, Float, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModel, Base
 
 
-class PlaceAmenity(Base):
-    if getenv("HBNB_TYPE_STORAGE") == "db":
-        __tablename__ = "place_amenity"
-        metadata = Base.metadata
-        place_id = Column(String(60), ForeignKey("places.id"), primary_key=True, nullable=False)
-        amenity_id = Column(String(60), ForeignKey("amenities.id"), primary_key=True, nullable=False)
+if getenv("HBNB_TYPE_STORAGE") == "db":
+    place_amenity = Table('place_amenity', Base.metadata,
+                          Column('place_id', Integer, ForeignKey('places.id')),
+                          Column('amenity_id', Integer, ForeignKey('amenities.id')))
 
 
 class Place(BaseModel, Base):

@@ -6,7 +6,6 @@ import cmd
 from models import base_model
 from models import storage
 from models import CNC
-from datetime import datetime
 
 
 BaseModel = base_model.BaseModel
@@ -87,9 +86,7 @@ class HBNBCommand(cmd.Cmd):
         for k, v in CNC.items():
             if k == arg[0]:
                 my_obj = v(**args_dict)
-                my_obj.updated_at = datetime.utcnow()
-                storage.new(my_obj)
-                storage.save(my_obj)
+                my_obj.save()
                 print(my_obj.id)
 
     def do_show(self, arg):
