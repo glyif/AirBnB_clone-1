@@ -37,11 +37,12 @@ class DBStorage:
                                              getenv('HBNB_MYSQL_PWD'),
                                              getenv('HBNB_MYSQL_HOST'),
                                              getenv('HBNB_MYSQL_DB')))
+        if getenv('HBNB_ENV') == 'test':
+            Base.metadata.drop_all(self.__engine)
+
         Base.metadata.create_all(self.__engine)
         session = sessionmaker(self.__engine)
         self.__session = session()
-        if getenv('HBNB_ENV') == 'test':
-            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """
