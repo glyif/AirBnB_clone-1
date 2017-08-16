@@ -150,7 +150,7 @@ class TestAmenityInstances(unittest.TestCase):
         amenity_obj.name = "wifi"
         DBStorage.save(amenity_obj)
         actual = DBStorage.__session.query(Amenity.name).filter(
-            Amenity.id =- amenity_id).one()
+            Amenity.id == amenity_id).one()
         self.assertTrue(expected == actual)
 
 if __name__ == '__main__':
