@@ -7,13 +7,12 @@ from datetime import datetime
 import models
 import json
 from os import getenv
-from models.base_model import Base
-#from models.engine.db_storage.DBStorage import __session
 from models.engine.db_storage import DBStorage
 
 
 Amenity = models.amenity.Amenity
 BaseModel = models.base_model.BaseModel
+
 
 class TestAmenityDocs(unittest.TestCase):
     """Class for testing BaseModel docs"""
@@ -44,7 +43,7 @@ class TestAmenityDocs(unittest.TestCase):
         self.assertEqual(expected, actual)
 
 
-class TestAmenityInstances(unittest.TestCase):
+class TestAmenityInstances(unittest.TestCase, DBStorage):
     """testing for class instances"""
 
     @classmethod
@@ -53,32 +52,22 @@ class TestAmenityInstances(unittest.TestCase):
         print('....... Testing Functions .......')
         print('.........  Amenity  Class  .........')
         print('.................................\n\n')
-
-    def setUp(self):
-        """initializes new amenity for testing"""
         if (getenv("HBNB_TYPE_STORAGE") == "db"):
-            dbs_instance = DBStorage()
-            session = dbs_instance._DBStorage__session
-            engine = dbs_instance._DBStorage__engine
-#            Base.metadata.create_all(dbs_instance._DBStorage__engine)
-            self.amenity = Amenity(name="wifi")
-            session.add(self.amenity)
-
-            # DBStorage.new(self, self.amenity)
-            session.commit()
-
-            # DBStorage.save()
+            cls.dbs_instance = DBStorage()
+            cls.session = cls.dbs_instance._DBStorage__session
+            cls.engine = cls.dbs_instance._DBStorage__engine
+            cls.amenity = Amenity(name="wifi")
+            cls.amenity.save()
+            cls.session.commit()
         else:
-            self.amenity = Amenity()
+            cls.amenity = Amenity()
 
     @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == "file",
                      "only need to tearDown if database used")
     def tearDown(self):
         """tearDown to close __session and __engine when using database"""
-        print("asdfas;ldkfjas;dfiljadf;laskdjf;asldkfjas;ldfkjasd;fkasdf")
-        session.expunge_all()
-        session.close()
-        engine.close()
+        print("bye")
+        self.session.close()
 
     def test_instantiation(self):
         """... checks if Amenity is properly instantiated"""
@@ -146,7 +135,7 @@ class TestAmenityInstances(unittest.TestCase):
                      "this test uses a database for storage")
     def test_amenity_id(self):
         expected = self.amenity.id
-        actual = DBStorage.__session.query(Amenity).filter(
+        actual = self.dbs_instance._DBStorage__session.query(Amenity).filter(
             Amenity.id == expected).one()
         self.assertTrue(expected == actual)
 
@@ -155,9 +144,9 @@ class TestAmenityInstances(unittest.TestCase):
     def test_amenity_attr_name(self):
         expected = "wifi"
         amenity_id = self.amenity.id
-        amenity_obj = DBStorage.__session.query(Amenity).filter(
+        amenity_obj = self.dbs_instance._DBStorage__session.query(Amenity).filter(
             Amenity.id == amenity_id).one()
-        actual = DBStorage.__session.query(Amenity.name).filter(
+        actual = self.dbs_instance._DBStorage__session.query(Amenity.name).filter(
             Amenity.id == amenity_id).one()
         self.assertTrue(expected == actual)
 
