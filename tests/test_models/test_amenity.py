@@ -66,7 +66,6 @@ class TestAmenityInstances(unittest.TestCase, DBStorage):
                      "only need to tearDown if database used")
     def tearDown(self):
         """tearDown to close __session and __engine when using database"""
-        print("bye")
         self.session.close()
 
     def test_instantiation(self):
