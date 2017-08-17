@@ -7,13 +7,13 @@ from datetime import datetime
 import models
 import json
 import os
+from os import getenv, environ
 
 User = models.user.User
 BaseModel = models.base_model.BaseModel
 FileStorage = models.file_storage.FileStorage
 storage = models.storage
 F = './dev/file.json'
-
 
 class TestFileStorageDocs(unittest.TestCase):
     """Class for testing BaseModel docs"""
