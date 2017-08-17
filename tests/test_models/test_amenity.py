@@ -7,6 +7,8 @@ from datetime import datetime
 import models
 import json
 from os import getenv
+from tests import storage
+
 from models.engine.db_storage import DBStorage
 
 
@@ -53,7 +55,7 @@ class TestAmenityInstances(unittest.TestCase, DBStorage):
         print('.........  Amenity  Class  .........')
         print('.................................\n\n')
         if (getenv("HBNB_TYPE_STORAGE") == "db"):
-            cls.dbs_instance = DBStorage()
+            cls.dbs_instance = storage
             cls.session = cls.dbs_instance._DBStorage__session
             cls.engine = cls.dbs_instance._DBStorage__engine
             cls.amenity = Amenity(name="wifi")
