@@ -289,7 +289,7 @@ class HBNBCommand(cmd.Cmd):
         marshalled_dict = {}
         for item in list:
             split = item.split("=")
-            if HBNBCommand.convert_type(split[1]):
+            if HBNBCommand.convert_type(split[1]) is not None:
                 marshalled_dict[split[0]] = HBNBCommand.convert_type(split[1])
 
         return marshalled_dict
@@ -302,7 +302,7 @@ class HBNBCommand(cmd.Cmd):
         :param string: string to validate
         :return: None if not valid string, string if is valid
         """
-        if string[0] != '"' or string[-1] != '"':
+        if string[0] != "\"" or string[len(string) - 1] != "\"":
             return None
 
         string = string[1:-1]
@@ -325,20 +325,12 @@ class HBNBCommand(cmd.Cmd):
         :return: converted type: float, int, string
         """
 
-        if string[0] == '"' and string[-1] == '"':
-            string = HBNBCommand.validate_string(string)
-            if not string:
-                pass
-            else:
-                return string
+        if string[0] != '"':
+            if '.' in string:
+                return float(string)
+            return int(string)
 
-        if string.isdigit():
-            string = int(string)
-        else:
-            try:
-                string = float(string)
-            except:
-                pass
+        string = HBNBCommand.validate_string(string)
 
         return string
 
