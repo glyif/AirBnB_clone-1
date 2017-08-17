@@ -6,6 +6,9 @@ import unittest
 from datetime import datetime
 import models
 import json
+from os import getenv
+from tests import storage
+from models import State
 
 City = models.city.City
 BaseModel = models.base_model.BaseModel
@@ -49,10 +52,17 @@ class TestCityInstances(unittest.TestCase):
         print('....... Testing Functions .......')
         print('.........  City Class  .........')
         print('.................................\n\n')
-
-    def setUp(self):
-        """initializes new city for testing"""
-        self.city = City()
+        if (getenv("HBNB_TYPE_STORAGE") == "db"):
+            cls.dbs_instance = storage
+            cls.session = cls.dbs_instance._DBStorage__session
+            cls.engine = cls.dbs_instance._DBStorage__engine
+            cls.state = State(name="Colorado")
+            cls.state_id = cls.state.id
+            cls.model = City(name="Boulder", state_id=cls.state_id)
+            cls.model.save()
+            cls.session.commit()
+        else:
+            cls.model = City()
 
     def test_instantiation(self):
         """... checks if City is properly instantiated"""
