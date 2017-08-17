@@ -62,7 +62,7 @@ class TestAmenityInstances(unittest.TestCase):
         else:
             cls.amenity = Amenity()
 
-    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == "file",
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != "db",
                      "only need to tearDown if database used")
     def tearDown(self):
         """tearDown to close __session and __engine when using database"""
@@ -130,15 +130,15 @@ class TestAmenityInstances(unittest.TestCase):
         expected = "greatWifi"
         self.assertEqual(expected, actual)
 
-    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == 'file',
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != "db",
                      "this test uses a database for storage")
     def test_amenity_id(self):
         expected = self.amenity.id
         actual = self.dbs_instance._DBStorage__session.query(Amenity).filter(
             Amenity.id == expected).one()
-        self.assertTrue(expected == actual)
+        self.assertTrue(expected == actual.id)
 
-    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == 'file',
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != "db",
                      "this test uses a database for stroage")
     def test_amenity_attr_name(self):
         expected = "wifi"
@@ -147,7 +147,7 @@ class TestAmenityInstances(unittest.TestCase):
             Amenity.id == amenity_id).one()
         actual = self.dbs_instance._DBStorage__session.query(Amenity.name).filter(
             Amenity.id == amenity_id).one()
-        self.assertTrue(expected == actual)
+        self.assertTrue(expected == actual.name)
 
 if __name__ == '__main__':
     unittest.main()
