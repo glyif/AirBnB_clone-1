@@ -2,12 +2,13 @@
 """
 Unit Test for BaseModel Class
 """
+from os import getenv
 import unittest
 from datetime import datetime
 import models
 import json
-
-BaseModel = models.base_model.BaseModel
+from models import BaseModel
+from tests import storage
 
 
 class TestBaseModelDocs(unittest.TestCase):
@@ -66,10 +67,15 @@ class TestBaseModelInstances(unittest.TestCase):
         print('....... Testing Functions .......')
         print('.....  For BaseModel Class  .....')
         print('.................................\n\n')
-
-    def setUp(self):
-        """initializes new BaseModel instance for testing"""
-        self.model = BaseModel()
+        if (getenv("HBNB_TYPE_STORAGE") == "db"):
+            cls.dbs_instance = storage
+            cls.session = cls.dbs_instance._DBStorage__session
+            cls.engine = cls.dbs_instance._DBStorage__engine
+            cls.model = BaseModel()
+            cls.model.save()
+            cls.session.commit()
+        else:
+            cls.model = BaseModel()
 
     def test_instantiation(self):
         """... checks if BaseModel is properly instantiated"""
