@@ -7,11 +7,13 @@ from datetime import datetime
 import models
 import json
 from os import getenv
+from models.base_model import Base
+#from models.engine.db_storage.DBStorage import __session
 from models.engine.db_storage import DBStorage
+
 
 Amenity = models.amenity.Amenity
 BaseModel = models.base_model.BaseModel
-
 
 class TestAmenityDocs(unittest.TestCase):
     """Class for testing BaseModel docs"""
@@ -55,10 +57,17 @@ class TestAmenityInstances(unittest.TestCase):
     def setUp(self):
         """initializes new amenity for testing"""
         if (getenv("HBNB_TYPE_STORAGE") == "db"):
-            # DBStorage.__init__()
+            dbs_instance = DBStorage()
+            session = dbs_instance._DBStorage__session
+            engine = dbs_instance._DBStorage__engine
+#            Base.metadata.create_all(dbs_instance._DBStorage__engine)
             self.amenity = Amenity(name="wifi")
-            DBStorage.new(self.amenity)
-            DBStorage.save()
+            session.add(self.amenity)
+
+            # DBStorage.new(self, self.amenity)
+            session.commit()
+
+            # DBStorage.save()
         else:
             self.amenity = Amenity()
 
@@ -66,8 +75,10 @@ class TestAmenityInstances(unittest.TestCase):
                      "only need to tearDown if database used")
     def tearDown(self):
         """tearDown to close __session and __engine when using database"""
-        DBStorage.__session.close()
-        DBStorage.__engine.close()
+        print("asdfas;ldkfjas;dfiljadf;laskdjf;asldkfjas;ldfkjasd;fkasdf")
+        session.expunge_all()
+        session.close()
+        engine.close()
 
     def test_instantiation(self):
         """... checks if Amenity is properly instantiated"""
