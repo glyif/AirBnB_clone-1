@@ -6,6 +6,8 @@ import unittest
 from datetime import datetime
 import models
 import json
+from os import getenv
+from tests import storage
 
 User = models.user.User
 BaseModel = models.base_model.BaseModel
@@ -53,6 +55,19 @@ class TestUserInstances(unittest.TestCase):
     def setUp(self):
         """initializes new user for testing"""
         self.user = User()
+        self.user.email = ""
+        self.user.password = ""
+        self.user.first_name = ""
+        self.user.last_name = ""
+        if (environ(HBNB_TYPE_STORAGE) == "db"):
+            DBStorage.__init__()
+
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != "db",
+                     "only need to tearDown if database used")
+    def tearDown(self):
+        """tearDown to close __session and __engine when using database"""
+        DBStorage.__session.close()
+        DBStorage.__engine.close()
 
     def test_instantiation(self):
         """... checks if User is properly instantiated"""
@@ -84,6 +99,8 @@ class TestUserInstances(unittest.TestCase):
         expected = type(datetime.now())
         self.assertEqual(expected, actual)
 
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == "db",
+                     "test uses file for storage")
     def test_to_json(self):
         """... to_json should return serializable dict object"""
         self.user_json = self.user.to_json()
@@ -94,6 +111,8 @@ class TestUserInstances(unittest.TestCase):
             actual = 0
         self.assertTrue(1 == actual)
 
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == "db",
+                     "test uses file for storage")
     def test_json_class(self):
         """... to_json should include class key with value User"""
         self.user_json = self.user.to_json()
@@ -112,6 +131,32 @@ class TestUserInstances(unittest.TestCase):
             actual = ''
         expected = "bettyholbertn@gmail.com"
         self.assertEqual(expected, actual)
+
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != 'db',
+                     "this test uses a database for storage")
+    def test_amenity_id(self):
+        expected = self.user.id
+        DBStorage.new(self.user)
+        DBStorage.save()
+        actual = DBStorage.__session.query(User).filter(
+            User.id == expected).one()
+        self.assertTrue(expected == actual)
+
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != 'db',
+                     "this test uses a database for stroage")
+    def test_user_attr_email(self):
+        expected = "hiholbie@gmail.com"
+        user_id = self.user.id
+        DBStorage.new(self.user)
+        DBStorage.save()
+        user_obj = DBStorage.__session.query(User).filter(
+            User.id == user_id).one()
+        user_obj.email = "wifi"
+        DBStorage.save(user_obj)
+        actual = DBStorage.__session.query(User.name).filter(
+            User.id == user_id).one()
+        self.assertTrue(expected == actual)
+
 
 if __name__ == '__main__':
     unittest.main

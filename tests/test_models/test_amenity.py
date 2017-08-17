@@ -88,7 +88,7 @@ class TestAmenityInstances(unittest.TestCase):
         actual = 0
         if 'updated_at' in my_str:
             actual += 1
-        self.assertTrue(0 == actual)
+        self.assertTrue(0 != actual)
 
     def test_updated_at(self):
         """... save function should add updated_at attribute"""

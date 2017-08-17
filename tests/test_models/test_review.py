@@ -6,6 +6,7 @@ import unittest
 from datetime import datetime
 import models
 import json
+from os import environ
 
 Review = models.review.Review
 BaseModel = models.base_model.BaseModel
@@ -83,6 +84,8 @@ class TestReviewInstances(unittest.TestCase):
         expected = type(datetime.now())
         self.assertEqual(expected, actual)
 
+    @unittest.skipIf(environ(HNBN_TYPE_STORAGE) == "db",
+                     "test uses file for storage")
     def test_to_json(self):
         """... to_json should return serializable dict object"""
         self.review_json = self.review.to_json()
@@ -93,6 +96,8 @@ class TestReviewInstances(unittest.TestCase):
             actual = 0
         self.assertTrue(1 == actual)
 
+    @unittest.skipIf(environ(HNBN_TYPE_STORAGE) == "db",
+                     "test uses file for storage")
     def test_json_class(self):
         """... to_json should include class key with value Review"""
         self.review_json = self.review.to_json()
@@ -102,8 +107,8 @@ class TestReviewInstances(unittest.TestCase):
         expected = 'Review'
         self.assertEqual(expected, actual)
 
-    def test_email_attribute(self):
-        """... add email attribute"""
+    def test_text_attribute(self):
+        """... add text attribute"""
         self.review.text = "This place smells"
         if hasattr(self.review, 'text'):
             actual = self.review.text

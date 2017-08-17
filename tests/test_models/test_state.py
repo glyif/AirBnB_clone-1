@@ -6,6 +6,7 @@ import unittest
 from datetime import datetime
 import models
 import json
+from os import getenv
 
 State = models.state.State
 BaseModel = models.base_model.BaseModel
@@ -83,6 +84,8 @@ class TestStateInstances(unittest.TestCase):
         expected = type(datetime.now())
         self.assertEqual(expected, actual)
 
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == "db",
+                     "test uses file for storage")
     def test_to_json(self):
         """... to_json should return serializable dict object"""
         self.state_json = self.state.to_json()
@@ -93,6 +96,8 @@ class TestStateInstances(unittest.TestCase):
             actual = 0
         self.assertTrue(1 == actual)
 
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == "db",
+                     "test uses file for storage")
     def test_json_class(self):
         """... to_json should include class key with value State"""
         self.state_json = self.state.to_json()

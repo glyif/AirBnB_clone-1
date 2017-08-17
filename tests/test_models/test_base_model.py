@@ -6,6 +6,7 @@ import unittest
 from datetime import datetime
 import models
 import json
+from os import getenv
 
 BaseModel = models.base_model.BaseModel
 
@@ -56,7 +57,8 @@ class TestBaseModelDocs(unittest.TestCase):
         actual = BaseModel.__str__.__doc__
         self.assertEqual(expected, actual)
 
-
+@unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == "db",
+                 "these tests for for use with database as storage")
 class TestBaseModelInstances(unittest.TestCase):
     """testing for class instances"""
 

@@ -6,7 +6,9 @@ import unittest
 from datetime import datetime
 import models
 import json
+from os import getenv
 
+User = models.user.User
 Place = models.place.Place
 BaseModel = models.base_model.BaseModel
 
@@ -45,14 +47,34 @@ class TestPlaceInstances(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        """initializes new place for testing"""
         print('\n\n.................................')
         print('....... Testing Functions .......')
         print('.........  Place Class  .........')
         print('.................................\n\n')
 
-    def setUp(self):
-        """initializes new place for testing"""
-        self.place = Place()
+        if (getenv("HBNB_TYPE_STORAGE") == "db"):
+            cls.dbs_instance = storage
+            cls.session = cls.dbs_instance._DBStorage__session
+            cls.engine = cls.dbs_instance._DBStorage__engine
+            cls.user = User(email="email@email.com", password="yo")
+            cls.user_id = cls.user.id
+            cls.state = State(name="California")
+            cls.state_id = cls.state.id
+            cls.city = City(name="Brentwood", state_id=cls.state_id)
+            cls.city_id = cls.city.id
+            cls.place = Place(city_id=cls.city_id,
+                              user_id=cls.user_id, name="House")
+            cls.place.save()
+            cls.session.commit()
+        else:
+            cls.user = User()
+            cls.user_id = cls.user.id
+            cls.state = State()
+            cls.state_id = cls.state.id
+            cls.city = City()
+            cls.city_id = cls.city.id
+            cls.place = Place()
 
     def test_instantiation(self):
         """... checks if Place is properly instantiated"""
@@ -83,6 +105,8 @@ class TestPlaceInstances(unittest.TestCase):
         expected = type(datetime.now())
         self.assertEqual(expected, actual)
 
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == "db",
+                     "test uses file for storage")
     def test_to_json(self):
         """... to_json should return serializable dict object"""
         self.place_json = self.place.to_json()
@@ -93,6 +117,8 @@ class TestPlaceInstances(unittest.TestCase):
             actual = 0
         self.assertTrue(1 == actual)
 
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == "db",
+                     "test uses file for storage")
     def test_json_class(self):
         """... to_json should include class key with value Place"""
         self.place_json = self.place.to_json()
@@ -102,8 +128,8 @@ class TestPlaceInstances(unittest.TestCase):
         expected = 'Place'
         self.assertEqual(expected, actual)
 
-    def test_email_attribute(self):
-        """... add email attribute"""
+    def test_max_guest_attribute(self):
+        """... add max_guest attribute"""
         self.place.max_guest = 3
         if hasattr(self.place, 'max_guest'):
             actual = self.place.max_guest

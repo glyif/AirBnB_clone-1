@@ -32,5 +32,17 @@ class TestHBNBCommandDocs(unittest.TestCase):
         actual = HBNBCommand.__doc__
         self.assertEqual(expected, actual)
 
+class TestHBNBCommandDocs(unittest.TestCase):
+    """Class for testing BaseModel docs"""
+
+    @classmethod
+    def setUpClass(cls):
+        print('\n\n.................................')
+        print('..... Testing Functions .....')
+        print('.......  In the Console  .......')
+        print('.................................\n\n')
+
+
+
 if __name__ == '__main__':
     unittest.main
