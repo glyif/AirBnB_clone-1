@@ -328,8 +328,6 @@ class HBNBCommand(cmd.Cmd):
         if string[0] != '"':
             if '.' in string:
                 return float(string)
-            if "-" in string:
-                return int(0)
             return int(string)
 
         string = HBNBCommand.validate_string(string)
