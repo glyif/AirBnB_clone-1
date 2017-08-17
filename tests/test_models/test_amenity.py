@@ -9,8 +9,6 @@ import json
 from os import getenv
 from tests import storage
 
-from models.engine.db_storage import DBStorage
-
 
 Amenity = models.amenity.Amenity
 BaseModel = models.base_model.BaseModel
@@ -45,7 +43,7 @@ class TestAmenityDocs(unittest.TestCase):
         self.assertEqual(expected, actual)
 
 
-class TestAmenityInstances(unittest.TestCase, DBStorage):
+class TestAmenityInstances(unittest.TestCase):
     """testing for class instances"""
 
     @classmethod
