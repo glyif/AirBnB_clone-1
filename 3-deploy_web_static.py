@@ -65,3 +65,14 @@ def do_deploy(archive_path):
         return True
     except:
         return False
+
+def deploy():
+    """
+    packs and deploys
+    """
+    pack_status = do_pack()
+
+    if not do_pack():
+        return False
+    else:
+        return do_deploy(pack_status)

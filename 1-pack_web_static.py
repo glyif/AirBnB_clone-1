@@ -23,6 +23,6 @@ def do_pack():
         operations.local("tar -cvzf versions/{}.tgz web_static/".
                          format(archive_name))
 
-        return "versions/{}".format(archive_name)
+        return "versions/{}.tgz".format(archive_name)
     except:
         return None
