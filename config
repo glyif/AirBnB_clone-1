@@ -12,7 +12,7 @@ server {
 	}
 
 	location /hbnb_static {
-		alias /data/web_static/current/
+		alias /data/web_static/current/;
 	}
 
 	error_page 404 /404.html;
