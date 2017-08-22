@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # sets up server for deployment
 
+sudo apt-get install -y nginx
 sudo mkdir -p /data/web_static/releases/test/
 wget https://raw.githubusercontent.com/glyif/AirBnB_clone_v2/master/deploy/test_index.html
 sudo mv test_index.html /data/web_static/releases/test/index.html
