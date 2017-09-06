@@ -30,7 +30,7 @@ def state_list():
     for instance, value in states.items():
         key = instance.split(".")[1]
         content[key] = value.name
-   
+
     return render_template('7-states_list.html', values=states)
 
 if __name__ == "__main__":
