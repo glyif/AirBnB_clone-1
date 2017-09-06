@@ -5,6 +5,12 @@ Handles I/O, writing and reading, of JSON for storage of all class instances
 import json
 from models import base_model, amenity, city, place, review, state, user
 from models.state import State
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.user import User
+
 from datetime import datetime
 
 strptime = datetime.strptime
@@ -35,10 +41,10 @@ class FileStorage:
         if cls is None:
             return FileStorage.__objects
         match_class = eval(cls)()
-        for instance in FileStorage.__objects.keys():
-            if match_class.__class__.__name__ == cls:
+        for instance, obj in FileStorage.__objects.items():
+            if obj.__class__.__name__ == cls:
                 filtered[instance] = FileStorage.__objects[instance]
-        return(filtered)
+        return filtered
 
     def new(self, obj):
         """sets / updates in __objects the obj with key <obj class name>.id"""
