@@ -25,3 +25,19 @@ class State(BaseModel, Base):
     def __init__(self, *args, **kwargs):
         """instantiates a new state"""
         super().__init__(self, *args, **kwargs)
+
+        if getenv("HBNB_TYPE_STORAGE") != "db":
+            @property
+            def cities(self):
+                from models import storage
+                all_cities = []
+                cities = []
+
+                for obj in storage.all.values():
+                    if obj.__name__ == "City":
+                        all_cities.append(obj)
+
+                for city in all_cities:
+                    if city.state_id == self.id:
+                        cities.append(city)
+

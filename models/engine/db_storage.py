@@ -59,7 +59,7 @@ class DBStorage:
                     query_data.update({key: instance})
             return query_data
         else:
-            for instance in self.__session.query(cls):
+            for instance in self.__session.query(DBStorage.CNC[cls]):
                 key = type(instance).__name__ + "." + instance.id
                 query_data.update({key: instance})
             return query_data
@@ -96,3 +96,11 @@ class DBStorage:
         Base.metadata.create_all(self.__engine)
         session = sessionmaker(self.__engine)
         self.__session = scoped_session(session)
+
+
+    def close(self):
+        """
+        removes session
+        :return nothing
+        """
+        self.__session.remove()

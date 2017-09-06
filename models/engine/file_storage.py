@@ -72,3 +72,8 @@ class FileStorage:
             if obj.id == k.split(".")[1] and k.split(".")[0] in str(obj):
                 FileStorage.__objects.pop(k, None)
                 self.save()
+
+    
+    def close(self):
+        """closes"""
+        self.reload()
