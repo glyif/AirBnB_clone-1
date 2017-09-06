@@ -74,8 +74,12 @@ def even_odd(n):
     try:
         number = int(n)
         if number % 2:
-            return render_template("6-number_odd_or_even.html", number=n, position="odd")
-        return render_template("6-number_odd_or_even.html", number=n, position="even")
+            return render_template("6-number_odd_or_even.html",
+                                   number=n,
+                                   position="odd")
+        return render_template("6-number_odd_or_even.html",
+                               number=n,
+                               position="even")
     except:
         abort(404)
 
