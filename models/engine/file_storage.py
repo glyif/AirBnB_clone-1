@@ -34,13 +34,11 @@ class FileStorage:
         filtered = {}
         if cls is None:
             return FileStorage.__objects
-        
         match_class = eval(cls)()
         for instance in FileStorage.__objects.keys():
             if match_class.__class__.__name__ == cls:
                 filtered[instance] = FileStorage.__objects[instance]
         return(filtered)
-
 
     def new(self, obj):
         """sets / updates in __objects the obj with key <obj class name>.id"""
@@ -83,7 +81,6 @@ class FileStorage:
                 FileStorage.__objects.pop(k, None)
                 self.save()
 
-    
     def close(self):
         """closes"""
         self.reload()

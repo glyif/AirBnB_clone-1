@@ -36,4 +36,3 @@ class State(BaseModel, Base):
                 for city in all_cities:
                     if city.state_id == self.id:
                         cities.append(city)
-

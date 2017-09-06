@@ -66,6 +66,7 @@ def do_deploy(archive_path):
     except:
         return False
 
+
 def deploy():
     """
     packs and deploys
