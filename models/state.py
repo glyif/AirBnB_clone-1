@@ -30,12 +30,8 @@ class State(BaseModel, Base):
             @property
             def cities(self):
                 from models import storage
-                all_cities = []
+                all_cities = storage.all("City").values()
                 cities = []
-
-                for obj in storage.all.values():
-                    if obj.__name__ == "City":
-                        all_cities.append(obj)
 
                 for city in all_cities:
                     if city.state_id == self.id:

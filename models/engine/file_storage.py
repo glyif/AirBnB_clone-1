@@ -4,6 +4,7 @@ Handles I/O, writing and reading, of JSON for storage of all class instances
 """
 import json
 from models import base_model, amenity, city, place, review, state, user
+from models.state import State
 from datetime import datetime
 
 strptime = datetime.strptime
@@ -30,7 +31,16 @@ class FileStorage:
 
     def all(self, cls=None):
         """returns private attribute: __objects"""
-        return FileStorage.__objects
+        filtered = {}
+        if cls is None:
+            return FileStorage.__objects
+        
+        match_class = eval(cls)()
+        for instance in FileStorage.__objects.keys():
+            if match_class.__class__.__name__ == cls:
+                filtered[instance] = FileStorage.__objects[instance]
+        return(filtered)
+
 
     def new(self, obj):
         """sets / updates in __objects the obj with key <obj class name>.id"""
